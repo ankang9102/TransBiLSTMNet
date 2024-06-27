@@ -1,0 +1,54 @@
+from improved_transformer import TransformerLayer
+
+final_h5_file_location = 'h5/'
+final_h5_filename = 'data.h5'
+final_h5_file_data_location = os.path.join(final_h5_file_location,
+                                           final_h5_filename)
+
+h5_file = h5py.File(final_h5_file_data_location, 'r')
+x_train_data = h5_file.get('X_train')
+x_train = x_train_data[()]
+x_val_data = h5_file.get('X_val')
+x_val = x_val_data[()]
+
+y_train_data = h5_file.get('y_train')
+y_train = y_train_data[()]
+y_val_data = h5_file.get('y_val')
+y_val = y_val_data[()]
+
+def build_model(input_shape): 
+    input_layer = Input(shape=input_shape) 
+    h1 = h11
+    h2 = 33
+    lstm1 = Bidirectional(LSTM(units=128, input_shape=(h1, h2), return_sequences=True))(input_layer)
+    cbc0 = TransformerLayer(num_heads=8, hidden_units=256, dropout=0.0)
+    cb0 = cbc0(lstm1)
+    lstm2 = Bidirectional(LSTM(units=128,input_shape=(h1, h2), return_sequences=True))(input_layer)
+    cbp0 = TransformerLayer(num_heads=4, hidden_units=256, dropout=0.0)
+    cp0 = cbp0(lstm2)
+    cc0 = concatenate([cb0,cp0])
+    h3 =h11
+    h4 =256
+    lstm3 = Bidirectional(LSTM(units=128, input_shape=(h3,  h4), return_sequences=True))(cc0)
+    cbc1 = TransformerLayer(num_heads=8, hidden_units=256, dropout=0.0)
+    cb1 = cbc1(lstm3)
+    lstm4 = Bidirectional(LSTM(units=128,input_shape=(h3,  h4), return_sequences=True))(cc0)
+    cbp1 = TransformerLayer(num_heads=4, hidden_units=256, dropout=0.0)
+    cp1 = cbp1(lstm4)
+    cc1 = concatenate([cb1,cp1])
+    cc2 = concatenate([cc0,cc1])
+    lstm5 = Bidirectional(LSTM(units=128, input_shape=(h3,  h4), return_sequences=True))(cc2)
+    cbc5 = TransformerLayer(num_heads=8, hidden_units=256, dropout=0.0)
+    cb5 = cbc5(lstm5)
+    cc3 = concatenate([cc0,cb5])
+    lstm6 = Bidirectional(LSTM(units=256, input_shape=(h3,  h4), return_sequences=True))(cc2)
+    cbc6 = TransformerLayer(num_heads=8, hidden_units=512, dropout=0.0)
+    cb6 = cbc6(lstm6)
+    cc4 = concatenate([cc0,cb6])
+    cc5 = concatenate([cc3,cc4])
+    cc9 = Flatten()(cc5)
+    dense_output = Dense(512, activation='hard_sigmoid')(cc9)
+    output = Dense(1)(dense_output)
+
+    model = Model(inputs=input_layer, outputs=output)
+    return model
