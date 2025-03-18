@@ -1,21 +1,5 @@
 from improved_transformer import TransformerLayer
 
-final_h5_file_location = 'h5/'
-final_h5_filename = 'data.h5'
-final_h5_file_data_location = os.path.join(final_h5_file_location,
-                                           final_h5_filename)
-
-h5_file = h5py.File(final_h5_file_data_location, 'r')
-x_train_data = h5_file.get('X_train')
-x_train = x_train_data[()]
-x_val_data = h5_file.get('X_val')
-x_val = x_val_data[()]
-
-y_train_data = h5_file.get('y_train')
-y_train = y_train_data[()]
-y_val_data = h5_file.get('y_val')
-y_val = y_val_data[()]
-
 def build_model(input_shape): 
     input_layer = Input(shape=input_shape) 
     lstm1 = Bidirectional(LSTM(units=128, input_shape=(h1, h2), return_sequences=True))(input_layer)
